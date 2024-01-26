@@ -1,4 +1,4 @@
-module jbp-platform-tools
+module platform-tools
 
 go 1.20
 
