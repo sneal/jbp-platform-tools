@@ -7,9 +7,9 @@ import (
 	"github.com/cloudfoundry-community/go-cfclient/v3/client"
 	"github.com/cloudfoundry-community/go-cfclient/v3/config"
 	"github.com/cloudfoundry-community/go-cfclient/v3/resource"
-	"jbp-platform-tools/buildpack"
-	"jbp-platform-tools/port"
 	"os"
+	"platform-tools/buildpack"
+	"platform-tools/port"
 )
 
 func main() {

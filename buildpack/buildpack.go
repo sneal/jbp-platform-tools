@@ -5,7 +5,7 @@ import (
 	"github.com/cloudfoundry-community/go-cfclient/v3/client"
 	"github.com/cloudfoundry-community/go-cfclient/v3/resource"
 	"golang.org/x/exp/slices"
-	"jbp-platform-tools/internal"
+	"platform-tools/internal"
 )
 
 type Buildpack struct {

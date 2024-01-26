@@ -3,7 +3,7 @@ package port
 import (
 	"context"
 	"github.com/cloudfoundry-community/go-cfclient/v3/client"
-	"jbp-platform-tools/internal"
+	"platform-tools/internal"
 )
 
 type Port struct {
