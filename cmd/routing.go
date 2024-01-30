@@ -2,12 +2,13 @@ package cmd
 
 import (
 	"context"
+	"fmt"
 	"github.com/cloudfoundry-community/go-cfclient/v3/client"
 	"github.com/spf13/cobra"
 	"platform-tools/internal"
 )
 
-type Port struct {
+type routing struct {
 	appMatch internal.FoundAppFn
 	cf       *client.Client
 }
@@ -21,7 +22,7 @@ var routeCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		p := &Port{
+		p := &routing{
 			appMatch: internal.DisplayApp,
 			cf:       cf,
 		}
@@ -34,7 +35,8 @@ func init() {
 	rootCmd.AddCommand(routeCmd)
 }
 
-func (p *Port) ListApps(ctx context.Context, port string) error {
+func (p *routing) ListApps(ctx context.Context, port string) error {
+	fmt.Printf("Found the following apps using a route with port %s:\n", port)
 	opts := &client.RouteListOptions{}
 	opts.Ports.EqualTo(port)
 	for {

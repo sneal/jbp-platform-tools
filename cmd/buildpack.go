@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"context"
+	"fmt"
 	"github.com/cloudfoundry-community/go-cfclient/v3/client"
 	"github.com/cloudfoundry-community/go-cfclient/v3/resource"
 	"github.com/spf13/cobra"
@@ -9,7 +10,7 @@ import (
 	"platform-tools/internal"
 )
 
-type Buildpack struct {
+type buildpack struct {
 	appMatch internal.FoundAppFn
 	cf       *client.Client
 }
@@ -23,7 +24,7 @@ var buildpackCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		bp := &Buildpack{
+		bp := &buildpack{
 			appMatch: internal.DisplayApp,
 			cf:       cf,
 		}
@@ -36,7 +37,8 @@ func init() {
 	rootCmd.AddCommand(buildpackCmd)
 }
 
-func (bp *Buildpack) ListApps(ctx context.Context, bpName string) error {
+func (bp *buildpack) ListApps(ctx context.Context, bpName string) error {
+	fmt.Printf("Found the following apps using buildpacks %s:\n", bpName)
 	opts := &client.AppListOptions{
 		LifecycleType: resource.LifecycleBuildpack,
 	}
