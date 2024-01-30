@@ -1,8 +1,9 @@
-package port
+package cmd
 
 import (
 	"context"
 	"github.com/cloudfoundry-community/go-cfclient/v3/client"
+	"github.com/spf13/cobra"
 	"platform-tools/internal"
 )
 
@@ -11,11 +12,26 @@ type Port struct {
 	cf       *client.Client
 }
 
-func New(cf *client.Client, appMatchCallback internal.FoundAppFn) *Port {
-	return &Port{
-		appMatch: appMatchCallback,
-		cf:       cf,
-	}
+var portNum string
+var routeCmd = &cobra.Command{
+	Use:   "routing",
+	Short: "Operates on routes",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		cf, err := internal.Client()
+		if err != nil {
+			return err
+		}
+		p := &Port{
+			appMatch: internal.DisplayApp,
+			cf:       cf,
+		}
+		return p.ListApps(cmd.Context(), portNum)
+	},
+}
+
+func init() {
+	routeCmd.Flags().StringVar(&portNum, "port", "", "port number")
+	rootCmd.AddCommand(routeCmd)
 }
 
 func (p *Port) ListApps(ctx context.Context, port string) error {

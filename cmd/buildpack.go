@@ -1,9 +1,10 @@
-package buildpack
+package cmd
 
 import (
 	"context"
 	"github.com/cloudfoundry-community/go-cfclient/v3/client"
 	"github.com/cloudfoundry-community/go-cfclient/v3/resource"
+	"github.com/spf13/cobra"
 	"golang.org/x/exp/slices"
 	"platform-tools/internal"
 )
@@ -13,11 +14,26 @@ type Buildpack struct {
 	cf       *client.Client
 }
 
-func New(cf *client.Client, appMatchCallback internal.FoundAppFn) *Buildpack {
-	return &Buildpack{
-		appMatch: appMatchCallback,
-		cf:       cf,
-	}
+var bpName string
+var buildpackCmd = &cobra.Command{
+	Use:   "buildpack",
+	Short: "Operates on buildpacks",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		cf, err := internal.Client()
+		if err != nil {
+			return err
+		}
+		bp := &Buildpack{
+			appMatch: internal.DisplayApp,
+			cf:       cf,
+		}
+		return bp.ListApps(cmd.Context(), bpName)
+	},
+}
+
+func init() {
+	buildpackCmd.Flags().StringVar(&bpName, "name", "", "buildpack name")
+	rootCmd.AddCommand(buildpackCmd)
 }
 
 func (bp *Buildpack) ListApps(ctx context.Context, bpName string) error {
